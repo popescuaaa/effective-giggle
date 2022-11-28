@@ -5,8 +5,7 @@ from model import Encoder, Decoder, Seq2Seq
 
 from utils import NumeralsDataset, generate_dataset, load_configurations
 from utils import SRC, TRG
-from torchtext.legacy.data import BucketIterator
-
+from torchtext.data import BucketIterator
 from argparse import ArgumentParser
 
 

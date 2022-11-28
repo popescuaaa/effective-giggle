@@ -1,5 +1,5 @@
-from torchtext.legacy.data import Field
-from torchtext.legacy.data.dataset import Dataset
+from torchtext.data import Field
+from torchtext.data.dataset import Dataset
 from model import START_TOKEN, END_TOKEN, PAD_TOKEN, UNK_TOKEN
 import yaml
 
@@ -90,7 +90,7 @@ def generate_dataset(max_num=2021):
 
 def load_configurations(config_file_path: str):
     with open(config_file_path) as config_file:
-        return yaml.load(config_file)
+        return yaml.load(config_file, Loader=yaml.Loader)
 
 
 
