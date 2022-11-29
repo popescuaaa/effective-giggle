@@ -1,0 +1,15 @@
+# Control dataset creation and shuffling for reproducible results
+SEED:         1234
+
+# Model parameters
+ENC_EMB_DIM:  32
+DEC_EMB_DIM:  32
+HID_DIM:      64
+N_LAYERS:     2
+ENC_DROPOUT:  0.5
+DEC_DROPOUT:  0.5
+
+# Training parameters
+N_EPOCHS:     50
+BATCH_SIZE:   32
+CLIP:         1
