@@ -201,10 +201,10 @@ if __name__ == "__main__":
                                                           sort_key=lambda x: len(x.src),
 
                                                           # Sort all examples in data using `sort_key`.
-                                                          sort=True,
+                                                          sort=False,
 
                                                           # Shuffle data on each epoch run.
-                                                          shuffle=True,
+                                                          shuffle=False,
 
                                                           # Use `sort_key` to sort examples in each batch.
                                                           sort_within_batch=True

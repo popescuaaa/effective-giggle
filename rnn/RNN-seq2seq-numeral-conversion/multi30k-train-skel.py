@@ -16,6 +16,7 @@ import io
 from torch.utils.data import DataLoader
 from torch.nn.utils.rnn import pad_sequence
 import spacy
+from double_encoder_decoder import DoubleEncoder, DoubleDecoder
 
 """
 For the requested datasets we need tokenization from spacy:
@@ -65,29 +66,21 @@ def train(model, iterator, optimizer, criterion, clip):
     model.train()
     epoch_loss = 0
 
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
     # main training loop
     for _, (src, trg) in enumerate(iterator):
-        # get batch of source (arabic numeral) and target (roman numeral) sequences
-        src, trg = src.to(torch.device("cpu")), trg.to(torch.device("cpu"))
+        src, trg = src.to(device), trg.to(device)
 
         optimizer.zero_grad()
 
-        # Tensor shape indications:
-        #   trg = [trg len, batch size]
-        #   output = [trg len, batch size, output dim]
-        # TODO: get the output predicted by the model
         output = model(src, trg)
 
-        # TODO: Create views of the output and target tensors so as to apply the CrossEntropyLoss criterion
-        #   over all tokens in the target sequence, ignoring the first. See torch.tensor.view()
-        #   trg = [(trg len - 1) * batch size]
-        #   output = [(trg len - 1) * batch size, output dim]
         output_dim = output.shape[-1]
 
         output = output[1:].view(-1, output_dim)
         trg = trg[1:].view(-1)
 
-        # TODO: apply the CrossEntropyLoss between output and trg
         loss = criterion(output, trg)
 
         loss.backward()
@@ -111,16 +104,14 @@ def evaluate(model, iterator, criterion):
     :param criterion:
     :return:
     """
-    # set model in evaluation mode
     model.eval()
     epoch_loss = 0
 
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
     with torch.no_grad():
         for _, (src, trg) in enumerate(iterator):
-            # Tensor shape indications
-            #   trg = [trg len, batch size]
-            #   output = [trg len, batch size, output dim]
-            src, trg = src.to(torch.device("cpu")), trg.to(torch.device("cpu"))
+            src, trg = src.to(device), trg.to(device)
 
             # TODO: get the output predicted by the model, WITHOUT applying teacher forcing
             output = model(src, trg, 0)
@@ -238,11 +229,11 @@ if __name__ == "__main__":
     torch.manual_seed(SEED)
 
     # set the device to run on
-    device = torch.device('cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # create and parameterize encoder and decoder models
-    enc = Encoder(INPUT_DIM, ENC_EMB_DIM, HID_DIM, N_LAYERS, ENC_DROPOUT)
-    dec = Decoder(OUTPUT_DIM, DEC_EMB_DIM, HID_DIM, N_LAYERS, DEC_DROPOUT)
+    enc = DoubleEncoder(INPUT_DIM, ENC_EMB_DIM, HID_DIM, N_LAYERS, ENC_DROPOUT)
+    dec = DoubleDecoder(OUTPUT_DIM, DEC_EMB_DIM, HID_DIM, N_LAYERS, DEC_DROPOUT)
 
     # create seq2se1 model and initialize its weights
     model = Seq2Seq(enc, dec, device).to(device)
