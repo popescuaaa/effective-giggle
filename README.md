@@ -12,6 +12,6 @@ Path:
 - [x] Transformer
   - [x] part 1 ~ code 
   - [x] part 1.1 wandb evaluation
-  - [ ] clean the repository
-  - [ ] save the picture
-  - [ ] part 2 ~ document
+  - [x] clean the repository
+  - [x] save the picture
+  - [x] part 2 ~ document
