@@ -5,7 +5,11 @@ Deep Learning Course Assignments
 
 Path:
 
-- [ ] CNN 
+- [x] GNN
+  - [x] GCN
+  - [x] GAT
+  - [x] CORA
+  - [x] PPI ~ 50%
 - [x] RNN
     - [x] part 1
     - [x] part 2 - not entirely
